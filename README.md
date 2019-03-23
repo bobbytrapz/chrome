@@ -2,6 +2,8 @@ Package for remote controlling with Chrome DevTools. Requires Google Chrome.
 
 Very much a work in progress. Features are only added as I need for my other projects.
 
+The api is not final and not even particularly well thought out. I just needed something quick and dirty. I'm still figuring a lot out. But this is a cool project and I will likely return to clean it up.
+
 There is no support for Windows but I hope there will be eventually.
 
 ## Take a screenshot
