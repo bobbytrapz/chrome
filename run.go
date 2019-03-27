@@ -26,8 +26,17 @@ func Wait() {
 	wg.Wait()
 }
 
-// Start finds chrome and runs it
+// Start finds chrome and runs it headless
 func Start(ctx context.Context, userProfileDir string, port int) (err error) {
+	return start(ctx, userProfileDir, port, true)
+}
+
+// StartFull finds chrome and runs it but it full (non-headless)
+func StartFull(ctx context.Context, userProfileDir string, port int) (err error) {
+	return start(ctx, userProfileDir, port, false)
+}
+
+func start(ctx context.Context, userProfileDir string, port int, shouldHeadless bool) (err error) {
 	var app string
 	if userProfileDir[:2] == "~/" {
 		var home string
@@ -60,14 +69,17 @@ func Start(ctx context.Context, userProfileDir string, port int) (err error) {
 		// todo: find chrome on windows
 	}
 
-	opts := []string{
-		"--headless",
+	var opts []string
+	if shouldHeadless {
+		opts = []string{"--headless"}
+	}
+	opts = append(opts,
 		"--window-size=1920,1080",
 		"--disable-gpu", // for Windows
 		fmt.Sprintf("--user-data-dir=%s", userProfileDir),
 		fmt.Sprintf("--remote-debugging-port=%d", port),
 		"about:blank",
-	}
+	)
 
 	if app == "" {
 		err = fmt.Errorf("chrome.Run: Could not find chrome")
