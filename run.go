@@ -70,12 +70,47 @@ func start(ctx context.Context, userProfileDir string, port int, shouldHeadless 
 	}
 
 	var opts []string
+
+	// optional
 	if shouldHeadless {
-		opts = []string{"--headless"}
+		opts = []string{"--headless", "--hide-scrollbars", "--mute-audio"}
 	}
+
+	if runtime.GOOS == "windows" {
+		opts = append(opts,
+			"--disable-gpu",
+		)
+	}
+
+	// defaults
 	opts = append(opts,
+		// note: I don't know what most of this does yet
+		// I lifted it from puppeteer
+		"--disable-background-networking",
+		"--enable-features=NetworkService,NetworkServiceInProcess",
+		"--disable-background-timer-throttling",
+		"--disable-backgrounding-occluded-windows",
+		"--disable-breakpad",
+		"--disable-client-side-phishing-detection",
+		"--disable-default-apps",
+		"--disable-dev-shm-usage",
+		"--disable-extensions",
+		"--disable-features=site-per-process,TranslateUI,BlinkGenPropertyTrees",
+		"--disable-hang-monitor",
+		"--disable-ipc-flooding-protection",
+		"--disable-popup-blocking",
+		"--disable-prompt-on-repost",
+		"--disable-renderer-backgrounding",
+		"--disable-sync",
+		"--force-color-profile=srgb",
+		"--metrics-recording-only",
+		"--no-first-run",
+		"--safebrowsing-disable-auto-update",
+		"--enable-automation",
+		"--password-store=basic",
+		"--use-mock-keychain",
+
 		"--window-size=1920,1080",
-		"--disable-gpu", // for Windows
 		fmt.Sprintf("--user-data-dir=%s", userProfileDir),
 		fmt.Sprintf("--remote-debugging-port=%d", port),
 		"about:blank",
