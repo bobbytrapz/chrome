@@ -110,7 +110,7 @@ func start(ctx context.Context, userProfileDir string, port int, shouldHeadless 
 		"--password-store=basic",
 		"--use-mock-keychain",
 
-		"--window-size=1920,1080",
+		"--window-size=1280,1696",
 		fmt.Sprintf("--user-data-dir=%s", userProfileDir),
 		fmt.Sprintf("--remote-debugging-port=%d", port),
 		"about:blank",
