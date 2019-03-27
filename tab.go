@@ -252,8 +252,8 @@ func ConnectToTab(ctx context.Context, wsURL string) (tab Tab, err error) {
 	return
 }
 
-// WaitForLoad waits a few seconds for page to load
-// pretty useless right now but we make add a better way
+// WaitForLoad waits for a page to load up to given maximum
+// pretty useless right now but we may improve it in the future
 func (t Tab) WaitForLoad(maxWait time.Duration) {
 	<-time.After(maxWait)
 }
