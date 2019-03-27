@@ -253,7 +253,7 @@ func ConnectToTab(ctx context.Context, wsURL string) (tab Tab, err error) {
 }
 
 // WaitForLoad waits a few seconds for page to load
-// todo: if we start missing blogs we need to find a better way
-func (t Tab) WaitForLoad() {
-	<-time.After(5 * time.Second)
+// pretty useless right now but we make add a better way
+func (t Tab) WaitForLoad(maxWait time.Duration) {
+	<-time.After(maxWait)
 }
