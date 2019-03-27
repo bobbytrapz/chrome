@@ -174,13 +174,15 @@ func (t Tab) PagePrintToPDF(saveAs string) {
 		"marginBottom":        0,
 		"marginLeft":          0,
 		"marginRight":         0,
+		"scale":               1,
+		"preferCSSPageSize":   true,
 	})
 	// wait for response
 	data := <-t.recv
 	var res ResPagePrintToPDF
 	err := json.Unmarshal(data, &res)
 	if err != nil {
-		Log("chrome.Tab.PagePrintToPDF: %s", err)
+		Log("chrome.Tab.PagePrintToPDF: Unmarshal: %s", err)
 		return
 	}
 	// Log("chrome.Tab.PagePrintToPDF: res: %+v", res)
@@ -188,12 +190,39 @@ func (t Tab) PagePrintToPDF(saveAs string) {
 	// decode
 	doc, err := base64.StdEncoding.DecodeString(res.Data)
 	if err != nil {
-		Log("chrome.Tab.PagePrintToPDF: %s", err)
+		Log("chrome.Tab.PagePrintToPDF: DecodeString: %s", err)
 	}
 
 	// save
 	fmt.Println("[save]", saveAs)
 	if err := ioutil.WriteFile(saveAs, doc, 0644); err != nil {
-		Log("chrome.Tab.PagePrintToPDF: %s", err)
+		Log("chrome.Tab.PagePrintToPDF: WriteFile: %s", err)
+	}
+}
+
+// ResCaptureSnapshot is a response
+type ResCaptureSnapshot struct {
+	Data string `json:"data"`
+}
+
+// CaptureSnapshot sends Page.captureSnapshot (experimental)
+func (t Tab) CaptureSnapshot(saveAs string) {
+	t.Command("Page.captureSnapshot", TabParams{
+		"format": "mhtml",
+	})
+
+	// wait for response
+	data := <-t.recv
+	var res ResPagePrintToPDF
+	err := json.Unmarshal(data, &res)
+	if err != nil {
+		Log("chrome.Tab.CaptureSnapshot: Unmarshal: %s", err)
+		return
+	}
+
+	// save
+	fmt.Println("[save]", saveAs)
+	if err := ioutil.WriteFile(saveAs, []byte(res.Data), 0644); err != nil {
+		Log("chrome.Tab.CaptureSnapshot: WriteFile: %s", err)
 	}
 }
