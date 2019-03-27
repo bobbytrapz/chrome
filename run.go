@@ -62,6 +62,7 @@ func Start(ctx context.Context, userProfileDir string, port int) (err error) {
 
 	opts := []string{
 		"--headless",
+		"--window-size=1920,1080",
 		"--disable-gpu", // for Windows
 		fmt.Sprintf("--user-data-dir=%s", userProfileDir),
 		fmt.Sprintf("--remote-debugging-port=%d", port),
