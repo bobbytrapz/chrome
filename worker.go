@@ -61,6 +61,9 @@ type TabWorkers struct {
 	stop chan struct{}
 }
 
+// TabWorkerFn is the job handler callback for a tab worker
+type TabWorkerFn func(Tab, TabJob) error
+
 // Wait for jobs to complete
 func (tw *TabWorkers) Wait() {
 	tw.wg.Wait()
@@ -75,7 +78,7 @@ func (tw *TabWorkers) Stop() {
 // each worker opens a new tab so N new tabs are opened in chrome
 // after TabWorker.Stop those tabs should close
 // each job we receieve is handled by the job function
-func NewTabWorkers(ctx context.Context, N int, jobFn func(Tab, TabJob) error) (tw *TabWorkers) {
+func NewTabWorkers(ctx context.Context, N int, jobFn TabWorkerFn) (tw *TabWorkers) {
 	tw = &TabWorkers{
 		w:    make([]TabWorker, 0),
 		wid:  0,
