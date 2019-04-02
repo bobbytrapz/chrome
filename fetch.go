@@ -24,7 +24,7 @@ func newRequest(ctx context.Context, host string, method string, url string) (re
 	}
 
 	// headers
-	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	req.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8")
 	req.Header.Add("Accept-Encoding", "gzip, deflate, br")
 	req.Header.Add("Accept-Language", "en-US,en;q=0.5")
 	req.Header.Add("Cache-Control", "no-cache")
