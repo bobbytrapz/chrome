@@ -21,6 +21,9 @@ var cmd *exec.Cmd
 // Log function
 var Log = func(string, ...interface{}) {}
 
+// WaitForOpen decides how long we wait for chrome to open
+var WaitForOpen = 5 * time.Second
+
 // Wait for chrome to close
 func Wait() {
 	wg.Wait()

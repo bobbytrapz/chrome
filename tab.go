@@ -3,6 +3,7 @@ package chrome
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -13,8 +14,8 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// WaitForOpen decides how long we wait for chrome to open
-var WaitForOpen = 5 * time.Second
+// WaitForConnect decides how long we wait to connect to a tab
+var WaitForConnect = 10 * time.Second
 
 var remoteAddr string
 
@@ -32,11 +33,28 @@ type TabParams map[string]interface{}
 // get a response from chrome
 func get(ctx context.Context, path string) (res *http.Response, err error) {
 	u := url.URL{Scheme: "http", Host: remoteAddr, Path: path}
-	res, err = Fetch(ctx, u.String())
-	if err != nil {
-		err = fmt.Errorf("chrome.get: %s", err)
-		return
+
+	Log("chrome.get: attempting to connect...")
+	timeout := time.After(WaitForConnect)
+	for {
+		select {
+		case err := <-ctx.Done():
+			return nil, fmt.Errorf("chrome.get: cancel: %s", err)
+		case <-timeout:
+			Log("chrome.get: timeout")
+			return nil, errors.New("chrome.get: timeout")
+		default:
+			res, err = Fetch(ctx, u.String())
+			if err == nil {
+				goto connected
+			} else {
+				Log("chrome.get: %s", err)
+			}
+		}
+		time.Sleep(500 * time.Millisecond)
 	}
+connected:
+	Log("chrome.get: success")
 
 	return
 }
