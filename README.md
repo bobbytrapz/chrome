@@ -1,3 +1,5 @@
+### Use https://github.com/bobbytrapz/gochrome instead.
+
 Package for remote controlling with Chrome DevTools. Requires Google Chrome.
 
 Very much a work in progress. Features are only added as I need for my other projects.
